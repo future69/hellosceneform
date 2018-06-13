@@ -16,6 +16,7 @@
 package com.google.ar.sceneform.samples.hellosceneform;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -24,6 +25,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.ar.core.Anchor;
@@ -56,6 +60,7 @@ public class HelloSceneformActivity extends AppCompatActivity {
   private TextView itemName;
   private TextView itemLocation;
   private TextView itemLabel;
+  private Switch switch1;
 
   @Override
   @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
@@ -64,14 +69,9 @@ public class HelloSceneformActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_ux);
+    //setContentView(R.layout.testpanel);
     arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 
-
-    //Enables the retrieving of data from testpanel.xlm
-      LayoutInflater inflater = getLayoutInflater();
-
-      View vi = inflater.inflate(R.layout.testpanel, null); //testpanel.xml is your file.
-      CheckBox cb1 = vi.findViewById(R.id.cbONE); //get a reference to the checkbox on the testpanel.xml file.
 
       //Builds the panel(Object), but it does not appear as you need to tap the screen for it to appear
       ViewRenderable.builder()
@@ -85,6 +85,7 @@ public class HelloSceneformActivity extends AppCompatActivity {
                       material -> {
                           placeholderMat =
                                   ShapeFactory.makeSphere(0.1f, new Vector3(0.0f, 0.15f, 0.0f), material); });
+
 
 
 
@@ -113,11 +114,15 @@ public class HelloSceneformActivity extends AppCompatActivity {
 //          andy.select();
 
             // Create the transformable panel? and add it to the anchor.
-            //This panel should be used to display the infromation about the item after a tap on the existing object
+            //This panel should be used to display the information about the item after a tap on the existing object
             TransformableNode panel = new TransformableNode(arFragment.getTransformationSystem());
             panel.setParent(anchorNode);
             panel.setRenderable(panelRenderable);
             panel.select();
+
+
+            //Testing
+
 
 
         });
@@ -125,38 +130,25 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
   }
 
-    //Check if the checkbox is ticked or not to display text
-    public void cbOnClick(View view) {
+    //Check if the switch is activated or not to display text
+    public void SwitchOnActivated(View view) {
 
         //Enables the retrieving of data from testpanel.xlm
         LayoutInflater inflater = getLayoutInflater();
 
         View vi = inflater.inflate(R.layout.testpanel, null); //testpanel.xml is your file.
-        CheckBox cb1 = vi.findViewById(R.id.cbONE); //get a reference to the checkbox on the testpanel.xml file.
+        switch1 = vi.findViewById(R.id.switchONE); //get a reference to the switch on the testpanel.xml file.
 
-        itemName = vi.findViewById(R.id.itemName);
-        itemLocation = vi.findViewById(R.id.itemLocation);
-        itemLabel = vi.findViewById(R.id.itemLabel);
 
-        if (cb1.isSelected()){
-
-            itemName.setVisibility(View.VISIBLE);
-            itemLocation.setVisibility(View.VISIBLE);
-            itemLabel.setVisibility(View.VISIBLE);
-        }
-
-        else if (!cb1.isSelected()){
-
-            itemName.setText(getString(R.string.ItemNameString2));
-            itemLocation.setText(getString(R.string.ItemLocationString2));
-            itemLabel.setText(getString(R.string.ItemLabelString2));
-
-            itemName.setVisibility(View.VISIBLE);
-            itemLocation.setVisibility(View.VISIBLE);
-            itemLabel.setVisibility(View.VISIBLE);
-
+        if (switch1.isActivated()){
 
         }
 
+        else if (!switch1.isActivated()){
+
+            Toast.makeText(this, getString(R.string.ItemNameString2) + "\n" + getString(R.string.ItemLocationString2) + "\n" + getString(R.string.ItemLabelString2), Toast.LENGTH_LONG).show();
+
+        }
     }
+
 }

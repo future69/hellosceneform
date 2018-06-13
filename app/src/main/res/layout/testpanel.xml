@@ -6,58 +6,14 @@
     android:layout_height="wrap_content"
     android:layout_centerHorizontal="true"
     android:background="@color/black"
-    android:layout_weight="3"
     >
 
-
-
-    <TextView
-        android:id="@+id/itemName"
+    <Switch
+        android:id="@+id/switchONE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textColor="@color/yellow"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="6dp"
-        android:text="Name:"
-        android:visibility="visible"
-        android:textAlignment="center" />
+        android:onClick="SwitchOnActivated"
 
-    <TextView
-        android:id="@+id/itemLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textColor="@color/yellow"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="6dp"
-        android:text="Location:"
-        android:visibility="visible"
-        android:textAlignment="center" />
-
-    <TextView
-        android:id="@+id/itemLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textColor="@color/yellow"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="6dp"
-        android:text="Label:"
-        android:visibility="visible"
-        android:textAlignment="center" />
-
-    <CheckBox
-        android:id="@+id/cbONE"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/showDetails"
-        android:clickable="true"
-        android:checked="false"
-        android:onClick="cbOnClick"
         />
 
 
