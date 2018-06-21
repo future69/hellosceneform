@@ -52,6 +52,22 @@
         android:layout_height="wrap_content"
         android:hint="@string/ItemLabelString"
         />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="add"
+        android:onClick="addOnClick"
+        />
+
+    <TextView
+        android:id="@+id/tryTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/lightBlue"
+        />
+
+
   </LinearLayout>
 
 

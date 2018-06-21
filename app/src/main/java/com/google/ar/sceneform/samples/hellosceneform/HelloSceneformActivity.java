@@ -27,12 +27,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.ar.core.Anchor;
 import com.google.ar.core.Frame;
 import com.google.ar.core.HitResult;
@@ -53,106 +55,123 @@ import com.google.ar.sceneform.ux.TransformableNode;
  * This is an example activity that uses the Sceneform UX package to make common AR tasks easier.
  */
 public class HelloSceneformActivity extends AppCompatActivity {
-  private static final String TAG = HelloSceneformActivity.class.getSimpleName();
+    private static final String TAG = HelloSceneformActivity.class.getSimpleName();
 
-  private ArFragment arFragment;
-  private ModelRenderable andyRenderable;
-  private ViewRenderable panelRenderable;
-  private ModelRenderable placeholderMat;
+    private ArFragment arFragment;
+    private ModelRenderable andyRenderable;
+    private ViewRenderable panelRenderable;
+    private ModelRenderable placeholderMat;
 
-  //Button and textviews to display item informationFDFSQADwzwF
+    //Button and textviews to display item information
+    private EditText itemName;
+    private EditText itemLocation;
+    private EditText itemLabel;
+    private Switch switch1;
 
-  private TextView itemName;
-  private TextView itemLocation;
-  private TextView itemLabel;
-  private Switch switch1;
+    int buttonCount = 1;
 
-    int buttonCount = 0;
+    MyDBHandler dbHandler;
 
-  @Override
-  @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
-  // CompletableFuture requires api level 24
-  // FutureReturnValueIgnored is not valid
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_ux);
-    arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+    //Testing
+    TextView myTV;
 
 
-//      //Builds the panel(Object), but it does not appear as you need to tap the screen for it to appear
-//      ViewRenderable.builder()
-//              .setView(this, R.layout.testpanel)
-//              .build()
-//              .thenAccept(renderable -> panelRenderable = renderable);
+    @Override
+    @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
+    // CompletableFuture requires api level 24
+    // FutureReturnValueIgnored is not valid
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_ux);
+        arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+
+        //Set the views of the EditTexts
+        itemName = findViewById(R.id.etName);
+        itemLocation = findViewById(R.id.etLocation);
+        itemLabel = findViewById(R.id.etLabel);
+
+        //Testing
+        myTV = findViewById(R.id.tryTV);
 
 
+        //Database
+        dbHandler = new MyDBHandler(this, null, null, 1);
 
 
+        arFragment.setOnTapArPlaneListener(
+                (HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
 
-    arFragment.setOnTapArPlaneListener(
-        (HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
-
-          if (plane.getType() != Type.HORIZONTAL_UPWARD_FACING) {
-            return;
-          }
-
-
-          createIndividualRenderable();
+                    if (plane.getType() != Type.HORIZONTAL_UPWARD_FACING) {
+                        return;
+                    }
 
 
-          // Create the Anchor.
-          Anchor anchor = hitResult.createAnchor();
-          AnchorNode anchorNode = new AnchorNode(anchor);
-          anchorNode.setParent(arFragment.getArSceneView().getScene());
+                    createIndividualRenderable();
 
 
-          // Create the transformable panel? and add it to the anchor.
-            // This panel should be used to display the information about the item after a tap on the existing object
-            TransformableNode panel = new TransformableNode(arFragment.getTransformationSystem());
-            panel.setParent(anchorNode);
-            panel.setRenderable(panelRenderable);
-            panel.select();
+                    // Create the Anchor.
+                    Anchor anchor = hitResult.createAnchor();
+                    AnchorNode anchorNode = new AnchorNode(anchor);
+                    anchorNode.setParent(arFragment.getArSceneView().getScene());
 
 
-        });
+                    // Create the transformable panel? and add it to the anchor.
+                    // This panel should be used to display the information about the item after a tap on the existing object
+                    TransformableNode panel = new TransformableNode(arFragment.getTransformationSystem());
+                    panel.setParent(anchorNode);
+                    panel.setRenderable(panelRenderable);
+                    panel.select();
 
 
-  }
+                });
 
 
-
-  public void createIndividualRenderable(){
-
-      LinearLayout newLinearLayout = new LinearLayout(this);
-      Button newButton = new Button(this);
-      newButton.setText(String.valueOf(buttonCount));
-
-      newLinearLayout.addView(newButton);
-
-      ViewRenderable.builder()
-              .setView(this, newLinearLayout)
-              .build()
-              .thenAccept(renderable -> panelRenderable = renderable);
-
-      buttonCount = buttonCount + 1;
-  }
+    }
 
 
+    //Create the renderable(button) in a new layout
+    public void createIndividualRenderable() {
 
-  //Redundant
-    //Check if the switch is activated or not to display text
-//    public void SwitchOnActivated(View view) {
-//
-//        //Enables the retrieving of data from testpanel.xlm
-//        LayoutInflater inflater = getLayoutInflater();
-//
-//        View vi = inflater.inflate(R.layout.testpanel, null); //testpanel.xml is your file.
-//        switch1 = vi.findViewById(R.id.switchONE); //get a reference to the switch on the testpanel.xml file.
-//
-//
-//        Toast.makeText(this, getString(R.string.ItemNameString2) + "\n" + getString(R.string.ItemLocationString2) + "\n" + getString(R.string.ItemLabelString2), Toast.LENGTH_LONG).show();
-//
-//    }
+        LinearLayout newLinearLayout = new LinearLayout(this);
+        Button newButton = new Button(this);
+        newButton.setText(String.valueOf(buttonCount));
+
+        newLinearLayout.addView(newButton);
+
+        ViewRenderable.builder()
+                .setView(this, newLinearLayout)
+                .build()
+                .thenAccept(renderable -> panelRenderable = renderable);
+
+        buttonCount = buttonCount + 1;
+    }
 
 
+    //Displays the information of the current node
+    public void toastOfItemInfo() {
+        String dbString = dbHandler.databaseToString();
+        Toast.makeText(this, dbString, Toast.LENGTH_LONG).show();
+    }
+
+
+    //Add information to the database
+    public void addTheItem(String name, String location, String label){
+        itemInformation theItemInfo = new itemInformation(name, location, label);
+        dbHandler.addItem(theItemInfo);
+        Toast.makeText(this, "Item successfully added!", Toast.LENGTH_SHORT).show();
+    }
+
+    //Delete item from database
+    public void deleteItemFromDB(String name){
+        dbHandler.deleteItem(name);
+        Toast.makeText(this, "Item successfully deleted!", Toast.LENGTH_SHORT).show();
+    }
+
+    //Testing
+    public void addOnClick(View view) {
+        addTheItem(itemName.getText().toString(), itemLocation.getText().toString(), itemLabel.getText().toString());
+
+        String dbString = dbHandler.databaseToString();
+        //myTV.setText(dbString);
+    }
 }
