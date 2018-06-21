@@ -18,6 +18,8 @@ package com.google.ar.sceneform.samples.hellosceneform;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,14 +29,17 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.ar.core.Anchor;
+import com.google.ar.core.Frame;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 import com.google.ar.core.Plane.Type;
 import com.google.ar.sceneform.AnchorNode;
+import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.Color;
 import com.google.ar.sceneform.rendering.MaterialFactory;
@@ -55,12 +60,14 @@ public class HelloSceneformActivity extends AppCompatActivity {
   private ViewRenderable panelRenderable;
   private ModelRenderable placeholderMat;
 
-  //Button and textviews to display item information
+  //Button and textviews to display item informationFDFSQADwzwF
 
   private TextView itemName;
   private TextView itemLocation;
   private TextView itemLabel;
   private Switch switch1;
+
+    int buttonCount = 0;
 
   @Override
   @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
@@ -69,23 +76,14 @@ public class HelloSceneformActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_ux);
-    //setContentView(R.layout.testpanel);
     arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 
 
-      //Builds the panel(Object), but it does not appear as you need to tap the screen for it to appear
-      ViewRenderable.builder()
-              .setView(this, R.layout.testpanel)
-              .build()
-              .thenAccept(renderable -> panelRenderable = renderable);
-
-      //test for 3d model
-      MaterialFactory.makeOpaqueWithColor(this, new Color(android.graphics.Color.YELLOW))
-              .thenAccept(
-                      material -> {
-                          placeholderMat =
-                                  ShapeFactory.makeSphere(0.1f, new Vector3(0.0f, 0.15f, 0.0f), material); });
-
+//      //Builds the panel(Object), but it does not appear as you need to tap the screen for it to appear
+//      ViewRenderable.builder()
+//              .setView(this, R.layout.testpanel)
+//              .build()
+//              .thenAccept(renderable -> panelRenderable = renderable);
 
 
 
@@ -93,36 +91,27 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
     arFragment.setOnTapArPlaneListener(
         (HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
-          if (panelRenderable == null) {
-            return;
-          }
 
           if (plane.getType() != Type.HORIZONTAL_UPWARD_FACING) {
             return;
           }
+
+
+          createIndividualRenderable();
+
 
           // Create the Anchor.
           Anchor anchor = hitResult.createAnchor();
           AnchorNode anchorNode = new AnchorNode(anchor);
           anchorNode.setParent(arFragment.getArSceneView().getScene());
 
-            //Original code
-//          // Create the transformable andy and add it to the anchor.
-//          TransformableNode andy = new TransformableNode(arFragment.getTransformationSystem());
-//          andy.setParent(anchorNode);
-//          andy.setRenderable(andyRenderable);
-//          andy.select();
 
-            // Create the transformable panel? and add it to the anchor.
-            //This panel should be used to display the information about the item after a tap on the existing object
+          // Create the transformable panel? and add it to the anchor.
+            // This panel should be used to display the information about the item after a tap on the existing object
             TransformableNode panel = new TransformableNode(arFragment.getTransformationSystem());
             panel.setParent(anchorNode);
             panel.setRenderable(panelRenderable);
             panel.select();
-
-
-            //Testing
-
 
 
         });
@@ -130,25 +119,40 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
   }
 
+
+
+  public void createIndividualRenderable(){
+
+      LinearLayout newLinearLayout = new LinearLayout(this);
+      Button newButton = new Button(this);
+      newButton.setText(String.valueOf(buttonCount));
+
+      newLinearLayout.addView(newButton);
+
+      ViewRenderable.builder()
+              .setView(this, newLinearLayout)
+              .build()
+              .thenAccept(renderable -> panelRenderable = renderable);
+
+      buttonCount = buttonCount + 1;
+  }
+
+
+
+  //Redundant
     //Check if the switch is activated or not to display text
-    public void SwitchOnActivated(View view) {
+//    public void SwitchOnActivated(View view) {
+//
+//        //Enables the retrieving of data from testpanel.xlm
+//        LayoutInflater inflater = getLayoutInflater();
+//
+//        View vi = inflater.inflate(R.layout.testpanel, null); //testpanel.xml is your file.
+//        switch1 = vi.findViewById(R.id.switchONE); //get a reference to the switch on the testpanel.xml file.
+//
+//
+//        Toast.makeText(this, getString(R.string.ItemNameString2) + "\n" + getString(R.string.ItemLocationString2) + "\n" + getString(R.string.ItemLabelString2), Toast.LENGTH_LONG).show();
+//
+//    }
 
-        //Enables the retrieving of data from testpanel.xlm
-        LayoutInflater inflater = getLayoutInflater();
-
-        View vi = inflater.inflate(R.layout.testpanel, null); //testpanel.xml is your file.
-        switch1 = vi.findViewById(R.id.switchONE); //get a reference to the switch on the testpanel.xml file.
-
-
-        if (switch1.isActivated()){
-
-        }
-
-        else if (!switch1.isActivated()){
-
-            Toast.makeText(this, getString(R.string.ItemNameString2) + "\n" + getString(R.string.ItemLocationString2) + "\n" + getString(R.string.ItemLabelString2), Toast.LENGTH_LONG).show();
-
-        }
-    }
 
 }

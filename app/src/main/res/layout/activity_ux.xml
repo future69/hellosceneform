@@ -25,5 +25,34 @@
       android:layout_height="match_parent" />
 
 
+  <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+
+      >
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/ItemNameString"
+        />
+
+    <EditText
+        android:id="@+id/etLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/ItemLocationString"
+        />
+
+    <EditText
+        android:id="@+id/etLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/ItemLabelString"
+        />
+  </LinearLayout>
+
 
 </FrameLayout>

@@ -17,9 +17,9 @@
 <resources>
     <string name="app_name">Hello Sceneform</string>
 
-    <string name="ItemNameString">Item Name : </string>
-    <string name="ItemLocationString">Item Location : </string>
-    <string name="ItemLabelString">Item Label : </string>
+    <string name="ItemNameString">Item Name </string>
+    <string name="ItemLocationString">Item Location </string>
+    <string name="ItemLabelString">Item Label </string>
 
     <string name="ItemNameString2">Item Name : Lenovo Laptop</string>
     <string name="ItemLocationString2">Item Location : Shelf 1</string>
