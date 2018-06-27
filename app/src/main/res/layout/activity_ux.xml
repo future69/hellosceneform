@@ -53,6 +53,14 @@
         android:hint="@string/ItemLabelString"
         />
 
+    <TextView
+        android:id="@+id/tvCOUNT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:textColor="@color/yellow"
+        />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -17,10 +17,12 @@ package com.google.ar.sceneform.samples.hellosceneform;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -67,8 +69,9 @@ public class HelloSceneformActivity extends AppCompatActivity {
     private EditText itemLocation;
     private EditText itemLabel;
     private Switch switch1;
+    private TextView itemCOUNT;
 
-    int buttonCount = 1;
+    int buttonCount = 0;
 
     MyDBHandler dbHandler;
 
@@ -89,6 +92,7 @@ public class HelloSceneformActivity extends AppCompatActivity {
         itemName = findViewById(R.id.etName);
         itemLocation = findViewById(R.id.etLocation);
         itemLabel = findViewById(R.id.etLabel);
+        itemCOUNT = findViewById(R.id.tvCOUNT);
 
         //Testing
         myTV = findViewById(R.id.tryTV);
@@ -102,6 +106,21 @@ public class HelloSceneformActivity extends AppCompatActivity {
                 (HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
 
                     if (plane.getType() != Type.HORIZONTAL_UPWARD_FACING) {
+                        return;
+                    }
+
+                    else if(TextUtils.isEmpty(itemName.getText().toString())) {
+                        itemName.setError("Please input a item name");
+                        return;
+                    }
+
+                    else if(TextUtils.isEmpty(itemLocation.getText().toString())) {
+                        itemName.setError("Please input a item location");
+                        return;
+                    }
+
+                    else if(TextUtils.isEmpty(itemLabel.getText().toString())) {
+                        itemName.setError("Please input a item label");
                         return;
                     }
 
@@ -132,18 +151,35 @@ public class HelloSceneformActivity extends AppCompatActivity {
     //Create the renderable(button) in a new layout
     public void createIndividualRenderable() {
 
+        buttonCount = buttonCount + 1;
+
         LinearLayout newLinearLayout = new LinearLayout(this);
         Button newButton = new Button(this);
         newButton.setText(String.valueOf(buttonCount));
-
+        //Testing
+        newButton.setId(buttonCount);
         newLinearLayout.addView(newButton);
+
+        newButton.setOnClickListener(view -> {
+            int theCount = Integer.parseInt(newButton.getText().toString());
+            showData2(theCount);
+        });
+
+
 
         ViewRenderable.builder()
                 .setView(this, newLinearLayout)
                 .build()
                 .thenAccept(renderable -> panelRenderable = renderable);
 
-        buttonCount = buttonCount + 1;
+
+        itemCOUNT.setText(String.valueOf(buttonCount));
+
+        //To add the data to database on tap on a valid surface
+        if (buttonCount != 1){
+            tapAndAdd();
+        }
+
     }
 
 
@@ -154,12 +190,12 @@ public class HelloSceneformActivity extends AppCompatActivity {
     }
 
 
-    //Add information to the database
-    public void addTheItem(String name, String location, String label){
-        itemInformation theItemInfo = new itemInformation(name, location, label);
-        dbHandler.addItem(theItemInfo);
-        Toast.makeText(this, "Item successfully added!", Toast.LENGTH_SHORT).show();
-    }
+//    //Add information to the database
+//    public void addTheItem(String name, String location, String label){
+//        itemInformation theItemInfo = new itemInformation(name, location, label);
+//        dbHandler.addItem(theItemInfo);
+//        Toast.makeText(this, "Item successfully added!", Toast.LENGTH_SHORT).show();
+//    }
 
     //Delete item from database
     public void deleteItemFromDB(String name){
@@ -167,11 +203,80 @@ public class HelloSceneformActivity extends AppCompatActivity {
         Toast.makeText(this, "Item successfully deleted!", Toast.LENGTH_SHORT).show();
     }
 
-    //Testing
+    //Testing (Add on click is only for add button)
     public void addOnClick(View view) {
-        addTheItem(itemName.getText().toString(), itemLocation.getText().toString(), itemLabel.getText().toString());
+        //addTheItem(itemName.getText().toString(), itemLocation.getText().toString(), itemLabel.getText().toString());
 
-        String dbString = dbHandler.databaseToString();
+        //new doInBackground().execute();
+        clearAllData();
+        //String dbString = dbHandler.databaseToString();
         //myTV.setText(dbString);
+        //showData();
     }
+
+    //Runs the background thread which is basically adding the data to the database
+    public void tapAndAdd(){
+        new doInBackground().execute();
+
+    }
+
+    //Display data from database to UI
+    public void showData(){
+        String dbString = dbHandler.databaseToString();
+        myTV.setText(dbString);
+    }
+
+    public void showData2(int theCount){
+
+        String dbString = dbHandler.databaseToString2(theCount);
+        myTV.setText(dbString);
+    }
+
+
+
+    //Testing purposes to clear the data
+    public void clearAllData(){
+        dbHandler.clearAll();
+    }
+
+
+
+
+
+
+    //Run code in background (AsyncTask)
+    private class doInBackground extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            //Add information to the database
+            itemInformation theItemInfo = new itemInformation(itemName.getText().toString(), itemLocation.getText().toString(), itemLabel.getText().toString(), buttonCount);
+            dbHandler.addItem(theItemInfo);
+
+            return null;
+
+
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            showData();
+        }
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
