@@ -129,6 +129,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 dbString += c.getString(c.getColumnIndex("itemLocation"));
 
                 dbString += "\n";
+
+                dbString += c.getString(c.getColumnIndex("itemLabel"));
             }
             c.moveToNext();
         }

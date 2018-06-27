@@ -71,7 +71,7 @@ public class HelloSceneformActivity extends AppCompatActivity {
     private Switch switch1;
     private TextView itemCOUNT;
 
-    int buttonCount = 0;
+    int buttonCount = 1;
 
     MyDBHandler dbHandler;
 
@@ -132,6 +132,9 @@ public class HelloSceneformActivity extends AppCompatActivity {
                     Anchor anchor = hitResult.createAnchor();
                     AnchorNode anchorNode = new AnchorNode(anchor);
                     anchorNode.setParent(arFragment.getArSceneView().getScene());
+                    String a = anchor.getPose().toString();
+                    Toast.makeText(this, a, Toast.LENGTH_SHORT).show();
+
 
 
                     // Create the transformable panel? and add it to the anchor.
@@ -151,20 +154,22 @@ public class HelloSceneformActivity extends AppCompatActivity {
     //Create the renderable(button) in a new layout
     public void createIndividualRenderable() {
 
-        buttonCount = buttonCount + 1;
-
         LinearLayout newLinearLayout = new LinearLayout(this);
         Button newButton = new Button(this);
         newButton.setText(String.valueOf(buttonCount));
+
         //Testing
         newButton.setId(buttonCount);
         newLinearLayout.addView(newButton);
 
-        newButton.setOnClickListener(view -> {
-            int theCount = Integer.parseInt(newButton.getText().toString());
-            showData2(theCount);
-        });
 
+
+        newButton.setOnClickListener(view -> {
+            myTV.setText(null);
+
+            int theCount = newButton.getId();
+            showData2(theCount + 2);
+        });
 
 
         ViewRenderable.builder()
@@ -176,9 +181,10 @@ public class HelloSceneformActivity extends AppCompatActivity {
         itemCOUNT.setText(String.valueOf(buttonCount));
 
         //To add the data to database on tap on a valid surface
-        if (buttonCount != 1){
-            tapAndAdd();
-        }
+        tapAndAdd();
+
+        //Keeps track
+        buttonCount = buttonCount + 1;
 
     }
 
@@ -203,15 +209,9 @@ public class HelloSceneformActivity extends AppCompatActivity {
         Toast.makeText(this, "Item successfully deleted!", Toast.LENGTH_SHORT).show();
     }
 
-    //Testing (Add on click is only for add button)
+    //Testing (Add on click is only for clear button)
     public void addOnClick(View view) {
-        //addTheItem(itemName.getText().toString(), itemLocation.getText().toString(), itemLabel.getText().toString());
-
-        //new doInBackground().execute();
         clearAllData();
-        //String dbString = dbHandler.databaseToString();
-        //myTV.setText(dbString);
-        //showData();
     }
 
     //Runs the background thread which is basically adding the data to the database
@@ -262,7 +262,7 @@ public class HelloSceneformActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            showData();
+            //showData();
         }
     }
 

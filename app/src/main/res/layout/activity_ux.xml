@@ -29,6 +29,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:orientation="vertical"
+      android:layout_gravity="top"
 
       >
 
@@ -36,6 +37,7 @@
         android:id="@+id/etName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="30dp"
         android:hint="@string/ItemNameString"
         />
 
@@ -43,6 +45,7 @@
         android:id="@+id/etLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="30dp"
         android:hint="@string/ItemLocationString"
         />
 
@@ -50,6 +53,7 @@
         android:id="@+id/etLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="30dp"
         android:hint="@string/ItemLabelString"
         />
 
@@ -64,7 +68,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="add"
+        android:text="Clear Database"
         android:onClick="addOnClick"
         />
 
@@ -72,6 +76,7 @@
         android:id="@+id/tryTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="30dp"
         android:background="@color/lightBlue"
         />
 
