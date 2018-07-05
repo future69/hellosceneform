@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
    Copyright 2018 Google LLC.
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,5 +25,15 @@
     <string name="ItemLabelString2">Item Label : laptop, lenovo</string>
 
     <string name="showDetails">Show item details?</string>
+
+    <string name="clearDatabase">Clear Database</string>
+    <string name="databaseActivity">Database</string>
+    <string name="returnToMain">Return</string>
+    <string name="title_activity_db_info_viewer">dbInfoViewer</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
 
 </resources>

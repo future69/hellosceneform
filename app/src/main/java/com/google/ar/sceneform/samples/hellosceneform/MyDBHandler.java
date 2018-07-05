@@ -18,6 +18,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_ITEMLABEL = "itemLabel";
     public static final String COLUMN_ITEMLOCATION = "itemLocation";
     public static final String COLUMN_BUTTONCOUNT = "buttonCount";
+    public static final String COLUMN_ITEMCOORDINATES = "itemCoordinates";
 
 
     public MyDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -32,7 +33,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 COLUMN_ITEMNAME + " TEXT, " +
                 COLUMN_ITEMLABEL + " TEXT, " +
                 COLUMN_ITEMLOCATION + " TEXT, " +
-                COLUMN_BUTTONCOUNT + " INT " +
+                COLUMN_BUTTONCOUNT + " INT, " +
+                COLUMN_ITEMCOORDINATES + " TEXT " +
                 ");";
 
         db.execSQL(query);
@@ -59,6 +61,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_ITEMLOCATION, theItem.get_itemLocation());
         values.put(COLUMN_ITEMLABEL, theItem.get_itemLabel());
         values.put(COLUMN_BUTTONCOUNT, theItem.get_buttonCount());
+        values.put(COLUMN_ITEMCOORDINATES, theItem.get_itemCoordinates());
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_ITEMINFORMATION, null, values);
         db.close();
@@ -86,16 +89,31 @@ public class MyDBHandler extends SQLiteOpenHelper {
         //Move to the first row in your results
         c.moveToNext();
 
+        dbString += "Item information : ";
+
+
 
         //Infinite while loop i think
         while(!c.isAfterLast()){
             if(c.getString(c.getColumnIndex("itemName")) != null){
-                dbString += c.getString(c.getColumnIndex("itemName"));
-                //There may be some sort of continuous loop here
+
                 dbString += "\n";
+
+                dbString += c.getString(c.getColumnIndex("itemName")) + ", ";
+
+                dbString += c.getString(c.getColumnIndex("itemLocation")) + ", ";
+
+                dbString += c.getString(c.getColumnIndex("itemLabel")) + ", ";
+
+                dbString += c.getString(c.getColumnIndex("itemCoordinates"));
+
+                dbString += "\n";
+
             }
             c.moveToNext();
         }
+
+
 
         db.close();
         return dbString;
@@ -131,6 +149,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 dbString += "\n";
 
                 dbString += c.getString(c.getColumnIndex("itemLabel"));
+
+
             }
             c.moveToNext();
         }

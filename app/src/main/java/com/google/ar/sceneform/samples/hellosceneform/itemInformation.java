@@ -6,6 +6,7 @@ public class itemInformation {
     private String _itemName;
     private String _itemLocation;
     private String _itemLabel;
+    private String _itemCoordinates;
 
     private int _buttonCount;
 
@@ -14,11 +15,13 @@ public class itemInformation {
 
     }
 
-    public itemInformation(String itemName, String itemLocation, String itemLabel, int buttonCount) {
+
+    public itemInformation(String itemName, String itemLocation, String itemLabel, int buttonCount, String itemCoordinates) {
         this._itemName = itemName;
         this._itemLocation = itemLocation;
         this._itemLabel = itemLabel;
         this._buttonCount = buttonCount;
+        this._itemCoordinates = itemCoordinates;
     }
 
     public String get_itemName() {
@@ -49,12 +52,24 @@ public class itemInformation {
         this._itemLabel = _itemLabel;
     }
 
+
+
     public int get_buttonCount() {
         return _buttonCount;
     }
 
     public void set_buttonCount(int _buttonCount) {
         this._buttonCount = _buttonCount;
+    }
+
+
+
+    public String get_itemCoordinates() {
+        return _itemCoordinates;
+    }
+
+    public void set_itemCoordinates(String _itemCoordinates) {
+        this._itemCoordinates = _itemCoordinates;
     }
 }
 

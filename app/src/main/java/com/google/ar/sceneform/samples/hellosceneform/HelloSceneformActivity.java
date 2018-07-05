@@ -42,6 +42,7 @@ import com.google.ar.core.Frame;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 import com.google.ar.core.Plane.Type;
+import com.google.ar.core.Pose;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.math.Vector3;
@@ -69,7 +70,7 @@ public class HelloSceneformActivity extends AppCompatActivity {
     private EditText itemLocation;
     private EditText itemLabel;
     private Switch switch1;
-    private TextView itemCOUNT;
+
 
     int buttonCount = 1;
 
@@ -77,6 +78,7 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
     //Testing
     TextView myTV;
+    String theCoordinates;
 
 
     @Override
@@ -92,7 +94,6 @@ public class HelloSceneformActivity extends AppCompatActivity {
         itemName = findViewById(R.id.etName);
         itemLocation = findViewById(R.id.etLocation);
         itemLabel = findViewById(R.id.etLabel);
-        itemCOUNT = findViewById(R.id.tvCOUNT);
 
         //Testing
         myTV = findViewById(R.id.tryTV);
@@ -100,6 +101,8 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
         //Database
         dbHandler = new MyDBHandler(this, null, null, 1);
+
+        createIndividualRenderable();
 
 
         arFragment.setOnTapArPlaneListener(
@@ -115,40 +118,57 @@ public class HelloSceneformActivity extends AppCompatActivity {
                     }
 
                     else if(TextUtils.isEmpty(itemLocation.getText().toString())) {
-                        itemName.setError("Please input a item location");
+                        itemLocation.setError("Please input a item location");
                         return;
                     }
 
                     else if(TextUtils.isEmpty(itemLabel.getText().toString())) {
-                        itemName.setError("Please input a item label");
+                        itemLabel.setError("Please input a item label");
                         return;
                     }
 
-
+                    //To create the renderable in the AR plane
                     createIndividualRenderable();
+
 
 
                     // Create the Anchor.
                     Anchor anchor = hitResult.createAnchor();
                     AnchorNode anchorNode = new AnchorNode(anchor);
                     anchorNode.setParent(arFragment.getArSceneView().getScene());
-                    String a = anchor.getPose().toString();
-                    Toast.makeText(this, a, Toast.LENGTH_SHORT).show();
+                    //anchorNode.getWorldPosition();
+
+                    //Testing to get coordinates of anchor
+                    theCoordinates = anchor.getPose().toString();
 
 
+                    //To add the data to database on tap on a valid surface
+                    tapAndAdd();
+
+                    Node node = new Node();
+                    node.setParent(arFragment.getArSceneView().getScene());
 
                     // Create the transformable panel? and add it to the anchor.
                     // This panel should be used to display the information about the item after a tap on the existing object
                     TransformableNode panel = new TransformableNode(arFragment.getTransformationSystem());
                     panel.setParent(anchorNode);
                     panel.setRenderable(panelRenderable);
+                    panelRenderable.setPixelsToMetersRatio(2000);
                     panel.select();
+
+
+
+                    itemName.setText(null);
+                    itemLocation.setText(null);
+                    itemLabel.setText(null);
 
 
                 });
 
 
     }
+
+
 
 
     //Create the renderable(button) in a new layout
@@ -163,7 +183,6 @@ public class HelloSceneformActivity extends AppCompatActivity {
         newLinearLayout.addView(newButton);
 
 
-
         newButton.setOnClickListener(view -> {
             myTV.setText(null);
 
@@ -171,29 +190,17 @@ public class HelloSceneformActivity extends AppCompatActivity {
             showData2(theCount + 2);
         });
 
-
         ViewRenderable.builder()
                 .setView(this, newLinearLayout)
                 .build()
                 .thenAccept(renderable -> panelRenderable = renderable);
 
 
-        itemCOUNT.setText(String.valueOf(buttonCount));
-
-        //To add the data to database on tap on a valid surface
-        tapAndAdd();
-
         //Keeps track
         buttonCount = buttonCount + 1;
-
     }
 
 
-    //Displays the information of the current node
-    public void toastOfItemInfo() {
-        String dbString = dbHandler.databaseToString();
-        Toast.makeText(this, dbString, Toast.LENGTH_LONG).show();
-    }
 
 
 //    //Add information to the database
@@ -210,8 +217,9 @@ public class HelloSceneformActivity extends AppCompatActivity {
     }
 
     //Testing (Add on click is only for clear button)
-    public void addOnClick(View view) {
-        clearAllData();
+    public void viewDB(View view) {
+        //clearAllData();
+        startActivity(new Intent(this, dbInfo.class));
     }
 
     //Runs the background thread which is basically adding the data to the database
@@ -242,16 +250,15 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
 
 
-
-
     //Run code in background (AsyncTask)
     private class doInBackground extends AsyncTask<Void, Void, Void>{
 
         @Override
         protected Void doInBackground(Void... voids) {
 
+
             //Add information to the database
-            itemInformation theItemInfo = new itemInformation(itemName.getText().toString(), itemLocation.getText().toString(), itemLabel.getText().toString(), buttonCount);
+            itemInformation theItemInfo = new itemInformation(itemName.getText().toString(), itemLocation.getText().toString(), itemLabel.getText().toString(), buttonCount, theCoordinates);
             dbHandler.addItem(theItemInfo);
 
             return null;
