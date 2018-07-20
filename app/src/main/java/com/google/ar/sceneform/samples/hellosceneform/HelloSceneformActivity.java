@@ -36,7 +36,7 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
+//irene
 import com.google.ar.core.Anchor;
 import com.google.ar.core.Frame;
 import com.google.ar.core.HitResult;
@@ -54,6 +54,14 @@ import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Vector;
+
 /**
  * This is an example activity that uses the Sceneform UX package to make common AR tasks easier.
  */
@@ -61,24 +69,34 @@ public class HelloSceneformActivity extends AppCompatActivity {
     private static final String TAG = HelloSceneformActivity.class.getSimpleName();
 
     private ArFragment arFragment;
-    private ModelRenderable andyRenderable;
+    private ViewRenderable panelRenderable2;
     private ViewRenderable panelRenderable;
     private ModelRenderable placeholderMat;
 
-    //Button and textviews to display item information
+    //Button and edittext to display item information
     private EditText itemName;
     private EditText itemLocation;
     private EditText itemLabel;
-    private Switch switch1;
 
-
-    int buttonCount = 1;
+    int buttonCount = 0;
 
     MyDBHandler dbHandler;
 
-    //Testing
     TextView myTV;
-    String theCoordinates;
+    AnchorNode anchorNode;
+    Vector3 vec3AnchorPos;
+
+    Vector3 reloadedVector3;
+
+    AnchorNode testAN;
+
+    float coordinatesX;
+    float coordinatesY;
+    float coordinatesZ;
+
+    //Testing
+    int COUNT = 3;
+
 
 
     @Override
@@ -90,20 +108,20 @@ public class HelloSceneformActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ux);
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 
+        //Testing
+        myTV = findViewById(R.id.tryTV);
+
         //Set the views of the EditTexts
         itemName = findViewById(R.id.etName);
         itemLocation = findViewById(R.id.etLocation);
         itemLabel = findViewById(R.id.etLabel);
-
-        //Testing
-        myTV = findViewById(R.id.tryTV);
 
 
         //Database
         dbHandler = new MyDBHandler(this, null, null, 1);
 
         createIndividualRenderable();
-
+        loadIndividualNodeRenderable(COUNT);
 
         arFragment.setOnTapArPlaneListener(
                 (HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
@@ -130,32 +148,29 @@ public class HelloSceneformActivity extends AppCompatActivity {
                     //To create the renderable in the AR plane
                     createIndividualRenderable();
 
-
-
                     // Create the Anchor.
                     Anchor anchor = hitResult.createAnchor();
-                    AnchorNode anchorNode = new AnchorNode(anchor);
+                    anchorNode = new AnchorNode(anchor);
                     anchorNode.setParent(arFragment.getArSceneView().getScene());
-                    //anchorNode.getWorldPosition();
 
-                    //Testing to get coordinates of anchor
-                    theCoordinates = anchor.getPose().toString();
+                    //Vector 3  world position
+                    vec3AnchorPos = anchorNode.getWorldPosition();
+
+                    coordinatesX = vec3AnchorPos.x;
+                    coordinatesY = vec3AnchorPos.y;
+                    coordinatesZ = vec3AnchorPos.z;
 
 
                     //To add the data to database on tap on a valid surface
                     tapAndAdd();
 
-                    Node node = new Node();
-                    node.setParent(arFragment.getArSceneView().getScene());
-
-                    // Create the transformable panel? and add it to the anchor.
+                    // Create the transformable panel and add it to the anchor.
                     // This panel should be used to display the information about the item after a tap on the existing object
                     TransformableNode panel = new TransformableNode(arFragment.getTransformationSystem());
                     panel.setParent(anchorNode);
                     panel.setRenderable(panelRenderable);
                     panelRenderable.setPixelsToMetersRatio(2000);
                     panel.select();
-
 
 
                     itemName.setText(null);
@@ -169,8 +184,6 @@ public class HelloSceneformActivity extends AppCompatActivity {
     }
 
 
-
-
     //Create the renderable(button) in a new layout
     public void createIndividualRenderable() {
 
@@ -181,7 +194,6 @@ public class HelloSceneformActivity extends AppCompatActivity {
         //Testing
         newButton.setId(buttonCount);
         newLinearLayout.addView(newButton);
-
 
         newButton.setOnClickListener(view -> {
             myTV.setText(null);
@@ -241,13 +253,71 @@ public class HelloSceneformActivity extends AppCompatActivity {
     }
 
 
-
     //Testing purposes to clear the data
     public void clearAllData(){
         dbHandler.clearAll();
     }
 
+    public void loadIndividualNodeRenderable(int lCount){
+        LinearLayout newLinearLayout1 = new LinearLayout(this);
+        Button newButton = new Button(this);
+        newButton.setText(String.valueOf(lCount - 2));
 
+        newButton.setId(lCount - 2);
+        newLinearLayout1.addView(newButton);
+
+        newButton.setOnClickListener(view -> {
+            myTV.setText(null);
+
+            int theCount = newButton.getId();
+            showData2(theCount + 2);
+        });
+
+        ViewRenderable.builder()
+                .setView(this, newLinearLayout1)
+                .build()
+                .thenAccept(renderable -> panelRenderable2 = renderable);
+
+
+    }
+
+
+
+    public void loadNode(View view) {
+
+            int x = COUNT;
+
+            COUNT++;
+
+            String pointX = dbHandler.retrieveVector3DataX(x);
+            String pointY = dbHandler.retrieveVector3DataY(x);
+            String pointZ = dbHandler.retrieveVector3DataZ(x);
+
+            if(pointX == "") {
+                return;
+            }
+
+            Float pointXFloat = Float.valueOf(pointX);
+            Float pointYFloat = Float.valueOf(pointY);
+            Float pointZFloat = Float.valueOf(pointZ);
+
+            reloadedVector3 = new Vector3(pointXFloat, pointYFloat, pointZFloat);
+
+            loadIndividualNodeRenderable(COUNT);
+
+            testAN = new AnchorNode();
+            testAN.setParent(arFragment.getArSceneView().getScene());
+            testAN.setWorldPosition(reloadedVector3);
+
+            testAN.setRenderable(panelRenderable2);
+
+            pointXFloat = null;
+            pointYFloat = null;
+            pointZFloat = null;
+
+
+
+    }
 
 
     //Run code in background (AsyncTask)
@@ -258,7 +328,7 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
 
             //Add information to the database
-            itemInformation theItemInfo = new itemInformation(itemName.getText().toString(), itemLocation.getText().toString(), itemLabel.getText().toString(), buttonCount, theCoordinates);
+            itemInformation theItemInfo = new itemInformation(itemName.getText().toString(), itemLocation.getText().toString(), itemLabel.getText().toString(), buttonCount, coordinatesX, coordinatesY, coordinatesZ);
             dbHandler.addItem(theItemInfo);
 
             return null;

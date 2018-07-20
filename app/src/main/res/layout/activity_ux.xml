@@ -69,6 +69,14 @@
           android:onClick="viewDB"
           />
 
+    <Button
+        android:id="@+id/loadNode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="test"
+        android:onClick="loadNode"
+        />
+
   </LinearLayout>
 
 

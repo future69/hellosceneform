@@ -1,6 +1,6 @@
 package com.google.ar.sceneform.samples.hellosceneform;
 
-
+//irene
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
@@ -18,7 +18,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_ITEMLABEL = "itemLabel";
     public static final String COLUMN_ITEMLOCATION = "itemLocation";
     public static final String COLUMN_BUTTONCOUNT = "buttonCount";
-    public static final String COLUMN_ITEMCOORDINATES = "itemCoordinates";
+    public static final String COLUMN_POINTX = "pointX";
+    public static final String COLUMN_POINTY = "pointY";
+    public static final String COLUMN_POINTZ = "pointZ";
 
 
     public MyDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -34,7 +36,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 COLUMN_ITEMLABEL + " TEXT, " +
                 COLUMN_ITEMLOCATION + " TEXT, " +
                 COLUMN_BUTTONCOUNT + " INT, " +
-                COLUMN_ITEMCOORDINATES + " TEXT " +
+                COLUMN_POINTX + " REAL, " +
+                COLUMN_POINTY + " REAL, " +
+                COLUMN_POINTZ + " REAL " +
                 ");";
 
         db.execSQL(query);
@@ -61,7 +65,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_ITEMLOCATION, theItem.get_itemLocation());
         values.put(COLUMN_ITEMLABEL, theItem.get_itemLabel());
         values.put(COLUMN_BUTTONCOUNT, theItem.get_buttonCount());
-        values.put(COLUMN_ITEMCOORDINATES, theItem.get_itemCoordinates());
+        values.put(COLUMN_POINTX, theItem.get_pointX());
+        values.put(COLUMN_POINTY, theItem.get_pointY());
+        values.put(COLUMN_POINTZ, theItem.get_pointZ());
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_ITEMINFORMATION, null, values);
         db.close();
@@ -105,7 +111,13 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
                 dbString += c.getString(c.getColumnIndex("itemLabel")) + ", ";
 
-                dbString += c.getString(c.getColumnIndex("itemCoordinates"));
+                dbString += c.getString(c.getColumnIndex("pointX")) + ", ";
+
+                dbString += c.getString(c.getColumnIndex("pointY")) + ", ";
+
+                dbString += c.getString(c.getColumnIndex("pointZ")) + ", ";
+
+                dbString += c.getString(c.getColumnIndex("buttonCount"));
 
                 dbString += "\n";
 
@@ -121,7 +133,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
 
-    //Print out database as a String //TESTING
+    //Print out database as a String
+    // Shows data on button press
     public String databaseToString2(int count){
 
         String dbString = "";
@@ -161,6 +174,78 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
 
+
+    public String retrieveVector3DataX(int count){
+        String dbFloat = "";
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_ITEMINFORMATION + " WHERE " + COLUMN_BUTTONCOUNT + " = " + count;
+
+            //Cursor points to a location in your results
+            Cursor c = db.rawQuery(query, null);
+            //Move to the first row in your results
+            c.moveToNext();
+            //Infinite while loop i think
+            while (!c.isAfterLast()) {
+                if (c.getString(c.getColumnIndex("buttonCount")) != null) {
+
+                    dbFloat += c.getString(c.getColumnIndex("pointX"));
+
+                }
+                //Dont change
+                c.moveToNext();
+            }
+            db.close();
+            return dbFloat;
+
+    }
+
+
+    public String retrieveVector3DataY(int count){
+        String dbFloat = "";
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_ITEMINFORMATION + " WHERE " + COLUMN_BUTTONCOUNT + " = " + count;
+
+            //Cursor points to a location in your results
+            Cursor c = db.rawQuery(query, null);
+            //Move to the first row in your results
+            c.moveToNext();
+            //Infinite while loop i think
+            while (!c.isAfterLast()) {
+                if (c.getString(c.getColumnIndex("buttonCount")) != null) {
+
+                    dbFloat += c.getString(c.getColumnIndex("pointY"));
+
+                }
+                //Dont change
+                c.moveToNext();
+            }
+            db.close();
+        return dbFloat;
+    }
+
+
+    public String retrieveVector3DataZ(int count){
+        String dbFloat = "";
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_ITEMINFORMATION + " WHERE " + COLUMN_BUTTONCOUNT + " = " + count;
+
+            //Cursor points to a location in your results
+            Cursor c = db.rawQuery(query, null);
+            //Move to the first row in your results
+            c.moveToNext();
+            //Infinite while loop i think
+            while (!c.isAfterLast()) {
+                if (c.getString(c.getColumnIndex("buttonCount")) != null) {
+
+                    dbFloat += c.getString(c.getColumnIndex("pointZ"));
+
+                }
+                //Dont change
+                c.moveToNext();
+            }
+            db.close();
+        return dbFloat;
+    }
 
 
 

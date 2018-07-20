@@ -6,7 +6,10 @@ public class itemInformation {
     private String _itemName;
     private String _itemLocation;
     private String _itemLabel;
-    private String _itemCoordinates;
+    private float _pointX;
+    private float _pointY;
+    private float _pointZ;
+
 
     private int _buttonCount;
 
@@ -16,12 +19,39 @@ public class itemInformation {
     }
 
 
-    public itemInformation(String itemName, String itemLocation, String itemLabel, int buttonCount, String itemCoordinates) {
+
+    public itemInformation(String itemName, String itemLocation, String itemLabel, int buttonCount, float pointX, float pointY, float pointZ) {
         this._itemName = itemName;
         this._itemLocation = itemLocation;
         this._itemLabel = itemLabel;
         this._buttonCount = buttonCount;
-        this._itemCoordinates = itemCoordinates;
+        this._pointX = pointX;
+        this._pointY = pointY;
+        this._pointZ = pointZ;
+    }
+
+    public float get_pointX() {
+        return _pointX;
+    }
+
+    public void set_pointX(float _pointX) {
+        this._pointX = _pointX;
+    }
+
+    public float get_pointY() {
+        return _pointY;
+    }
+
+    public void set_pointY(float _pointY) {
+        this._pointY = _pointY;
+    }
+
+    public float get_pointZ() {
+        return _pointZ;
+    }
+
+    public void set_pointZ(float _pointZ) {
+        this._pointZ = _pointZ;
     }
 
     public String get_itemName() {
@@ -64,13 +94,6 @@ public class itemInformation {
 
 
 
-    public String get_itemCoordinates() {
-        return _itemCoordinates;
-    }
-
-    public void set_itemCoordinates(String _itemCoordinates) {
-        this._itemCoordinates = _itemCoordinates;
-    }
 }
 
 
