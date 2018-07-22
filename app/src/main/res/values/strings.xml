@@ -20,16 +20,20 @@
     <string name="ItemLocationString">Item Location </string>
     <string name="ItemLabelString">Item Label </string>
 
-    <string name="ItemNameString2">Item Name : Lenovo Laptop</string>
-    <string name="ItemLocationString2">Item Location : Shelf 1</string>
-    <string name="ItemLabelString2">Item Label : laptop, lenovo</string>
-
     <string name="showDetails">Show item details?</string>
 
     <string name="clearDatabase">Clear Database</string>
     <string name="databaseActivity">Database</string>
     <string name="returnToMain">Return</string>
     <string name="title_activity_db_info_viewer">dbInfoViewer</string>
+
+    <string-array name="areaLocations">
+
+        <item>Room1</item>
+        <item>Room2</item>
+        <item>Room3</item>
+
+    </string-array>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.

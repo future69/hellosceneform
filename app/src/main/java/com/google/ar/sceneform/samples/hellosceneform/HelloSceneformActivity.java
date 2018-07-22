@@ -27,12 +27,14 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,7 +80,7 @@ public class HelloSceneformActivity extends AppCompatActivity {
     private EditText itemLocation;
     private EditText itemLabel;
 
-    int buttonCount = 0;
+    int buttonCount = 1;
 
     MyDBHandler dbHandler;
 
@@ -94,8 +96,14 @@ public class HelloSceneformActivity extends AppCompatActivity {
     float coordinatesY;
     float coordinatesZ;
 
+    Spinner spinner;
+
+    ArrayAdapter<CharSequence> adapter;
+
+
     //Testing
     int COUNT = 3;
+
 
 
 
@@ -116,6 +124,11 @@ public class HelloSceneformActivity extends AppCompatActivity {
         itemLocation = findViewById(R.id.etLocation);
         itemLabel = findViewById(R.id.etLabel);
 
+        //Set view of spinner and array adapter
+        spinner = (Spinner)findViewById(R.id.spinner1);
+        adapter = ArrayAdapter.createFromResource(this, R.array.areaLocations, android.R.layout.simple_list_item_1);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
         //Database
         dbHandler = new MyDBHandler(this, null, null, 1);
@@ -289,9 +302,9 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
             COUNT++;
 
-            String pointX = dbHandler.retrieveVector3DataX(x);
-            String pointY = dbHandler.retrieveVector3DataY(x);
-            String pointZ = dbHandler.retrieveVector3DataZ(x);
+            String pointX = dbHandler.retrieveVector3DataX(x, spinner.getSelectedItem().toString());
+            String pointY = dbHandler.retrieveVector3DataY(x, spinner.getSelectedItem().toString());
+            String pointZ = dbHandler.retrieveVector3DataZ(x, spinner.getSelectedItem().toString());
 
             if(pointX == "") {
                 return;
@@ -316,7 +329,6 @@ public class HelloSceneformActivity extends AppCompatActivity {
             pointZFloat = null;
 
 
-
     }
 
 
@@ -328,7 +340,7 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
 
             //Add information to the database
-            itemInformation theItemInfo = new itemInformation(itemName.getText().toString(), itemLocation.getText().toString(), itemLabel.getText().toString(), buttonCount, coordinatesX, coordinatesY, coordinatesZ);
+            itemInformation theItemInfo = new itemInformation(itemName.getText().toString(), itemLocation.getText().toString(), itemLabel.getText().toString(), spinner.getSelectedItem().toString() , buttonCount, coordinatesX, coordinatesY, coordinatesZ);
             dbHandler.addItem(theItemInfo);
 
             return null;

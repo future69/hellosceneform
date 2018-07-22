@@ -17,6 +17,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_ITEMNAME = "itemName";
     public static final String COLUMN_ITEMLABEL = "itemLabel";
     public static final String COLUMN_ITEMLOCATION = "itemLocation";
+    public static final String COLUMN_AREALOCATION = "areaLocation";
     public static final String COLUMN_BUTTONCOUNT = "buttonCount";
     public static final String COLUMN_POINTX = "pointX";
     public static final String COLUMN_POINTY = "pointY";
@@ -35,6 +36,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 COLUMN_ITEMNAME + " TEXT, " +
                 COLUMN_ITEMLABEL + " TEXT, " +
                 COLUMN_ITEMLOCATION + " TEXT, " +
+                COLUMN_AREALOCATION + " TEXT, " +
                 COLUMN_BUTTONCOUNT + " INT, " +
                 COLUMN_POINTX + " REAL, " +
                 COLUMN_POINTY + " REAL, " +
@@ -64,6 +66,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_ITEMNAME, theItem.get_itemName());
         values.put(COLUMN_ITEMLOCATION, theItem.get_itemLocation());
         values.put(COLUMN_ITEMLABEL, theItem.get_itemLabel());
+        values.put(COLUMN_AREALOCATION, theItem.get_areaLocation());
         values.put(COLUMN_BUTTONCOUNT, theItem.get_buttonCount());
         values.put(COLUMN_POINTX, theItem.get_pointX());
         values.put(COLUMN_POINTY, theItem.get_pointY());
@@ -117,7 +120,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
                 dbString += c.getString(c.getColumnIndex("pointZ")) + ", ";
 
-                dbString += c.getString(c.getColumnIndex("buttonCount"));
+                dbString += c.getString(c.getColumnIndex("buttonCount")) + ", ";
+
+                dbString += c.getString(c.getColumnIndex("areaLocation"));
 
                 dbString += "\n";
 
@@ -175,10 +180,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
 
 
-    public String retrieveVector3DataX(int count){
+    public String retrieveVector3DataX(int count, String areaLocation){
         String dbFloat = "";
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_ITEMINFORMATION + " WHERE " + COLUMN_BUTTONCOUNT + " = " + count;
+        String query = "SELECT * FROM " + TABLE_ITEMINFORMATION + " WHERE " + COLUMN_BUTTONCOUNT + " = " + count + " AND " + COLUMN_AREALOCATION + "='" + areaLocation + "'";
 
             //Cursor points to a location in your results
             Cursor c = db.rawQuery(query, null);
@@ -200,10 +205,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
 
-    public String retrieveVector3DataY(int count){
+    public String retrieveVector3DataY(int count, String areaLocation){
         String dbFloat = "";
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_ITEMINFORMATION + " WHERE " + COLUMN_BUTTONCOUNT + " = " + count;
+        String query = "SELECT * FROM " + TABLE_ITEMINFORMATION + " WHERE " + COLUMN_BUTTONCOUNT + " = " + count + " AND " + COLUMN_AREALOCATION + "='" + areaLocation + "'";
 
             //Cursor points to a location in your results
             Cursor c = db.rawQuery(query, null);
@@ -224,10 +229,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
 
-    public String retrieveVector3DataZ(int count){
+    public String retrieveVector3DataZ(int count, String areaLocation){
         String dbFloat = "";
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_ITEMINFORMATION + " WHERE " + COLUMN_BUTTONCOUNT + " = " + count;
+        String query = "SELECT * FROM " + TABLE_ITEMINFORMATION + " WHERE " + COLUMN_BUTTONCOUNT + " = " + count + " AND " + COLUMN_AREALOCATION + "='" + areaLocation + "'";
 
             //Cursor points to a location in your results
             Cursor c = db.rawQuery(query, null);
