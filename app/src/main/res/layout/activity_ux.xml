@@ -18,7 +18,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HelloSceneformActivity"
-    android:layout_weight="2"
     >
 
   <fragment android:name="com.google.ar.sceneform.ux.ArFragment"
@@ -34,8 +33,15 @@
       android:layout_gravity="top"
       android:layout_marginTop="32sp"
       android:layout_marginLeft="20sp"
-      android:weightSum="1"
       >
+
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    </Spinner>
 
     <EditText
         android:id="@+id/etName"
@@ -61,56 +67,62 @@
         android:hint="@string/ItemLabelString"
         />
 
-    <Spinner
-        android:id="@+id/spinner1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        >
-
-    </Spinner>
-
-      <Button
-          android:id="@+id/dbButton"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/databaseActivity"
-          android:onClick="viewDB"
-          />
-
-    <Button
-        android:id="@+id/loadNode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Load Points"
-        android:onClick="loadNode"
-        />
 
   </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="250dp"
+    android:orientation="vertical"
+    android:layout_marginTop="50dp"
+    android:layout_marginRight="20sp"
+    android:layout_gravity="end"
+    >
+
+    <Button
+        android:id="@+id/dbButton"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="40sp"
-        android:layout_marginEnd="20sp"
-        android:weightSum="1"
-        >
+        android:text="@string/databaseActivity"
+        android:onClick="viewDB"
+        />
+
+    <Button
+        android:id="@+id/restartButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/restartActivity"
+        android:onClick="restartActivity"
+        />
+
+    <Button
+        android:id="@+id/loadNode"
+        android:layout_width="match_parent"
+        android:layout_height="59dp"
+        android:onClick="loadNode"
+        android:text="Load Points"
+
+        />
 
 
-        <TextView
-            android:id="@+id/tryTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:background="@color/white"
-            android:textColor="@color/black"
-            android:layout_gravity="left"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-            />
+    <TextView
+        android:id="@+id/tryTV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/lightBlue"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        />
+
     </LinearLayout>
 
 
+
+</LinearLayout>
 
 </FrameLayout>

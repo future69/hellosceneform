@@ -27,6 +27,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -55,6 +56,8 @@ import com.google.ar.sceneform.rendering.ShapeFactory;
 import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
+
+
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -103,8 +106,6 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
     //Testing
     int COUNT = 3;
-
-
 
 
     @Override
@@ -193,8 +194,8 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
                 });
 
-
     }
+
 
 
     //Create the renderable(button) in a new layout
@@ -225,15 +226,6 @@ public class HelloSceneformActivity extends AppCompatActivity {
         buttonCount = buttonCount + 1;
     }
 
-
-
-
-//    //Add information to the database
-//    public void addTheItem(String name, String location, String label){
-//        itemInformation theItemInfo = new itemInformation(name, location, label);
-//        dbHandler.addItem(theItemInfo);
-//        Toast.makeText(this, "Item successfully added!", Toast.LENGTH_SHORT).show();
-//    }
 
     //Delete item from database
     public void deleteItemFromDB(String name){
@@ -298,36 +290,49 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
     public void loadNode(View view) {
 
-            int x = COUNT;
+        int x = COUNT;
 
-            COUNT++;
+        String pointX = dbHandler.retrieveVector3DataX(x, spinner.getSelectedItem().toString());
+        String pointY = dbHandler.retrieveVector3DataY(x, spinner.getSelectedItem().toString());
+        String pointZ = dbHandler.retrieveVector3DataZ(x, spinner.getSelectedItem().toString());
 
-            String pointX = dbHandler.retrieveVector3DataX(x, spinner.getSelectedItem().toString());
-            String pointY = dbHandler.retrieveVector3DataY(x, spinner.getSelectedItem().toString());
-            String pointZ = dbHandler.retrieveVector3DataZ(x, spinner.getSelectedItem().toString());
+        if(pointX == "") {
+            return;
+        }
 
-            if(pointX == "") {
-                return;
-            }
+        COUNT++;
 
-            Float pointXFloat = Float.valueOf(pointX);
-            Float pointYFloat = Float.valueOf(pointY);
-            Float pointZFloat = Float.valueOf(pointZ);
+        Float pointXFloat = Float.valueOf(pointX);
+        Float pointYFloat = Float.valueOf(pointY);
+        Float pointZFloat = Float.valueOf(pointZ);
 
-            reloadedVector3 = new Vector3(pointXFloat, pointYFloat, pointZFloat);
+        reloadedVector3 = new Vector3(pointXFloat, pointYFloat, pointZFloat);
 
-            loadIndividualNodeRenderable(COUNT);
+        loadIndividualNodeRenderable(COUNT);
 
-            testAN = new AnchorNode();
-            testAN.setParent(arFragment.getArSceneView().getScene());
-            testAN.setWorldPosition(reloadedVector3);
+        testAN = new AnchorNode();
+        testAN.setParent(arFragment.getArSceneView().getScene());
+        testAN.setWorldPosition(reloadedVector3);
+        panelRenderable2.setPixelsToMetersRatio(2000);
+        testAN.setRenderable(panelRenderable2);
 
-            testAN.setRenderable(panelRenderable2);
 
-            pointXFloat = null;
-            pointYFloat = null;
-            pointZFloat = null;
+        pointXFloat = null;
+        pointYFloat = null;
+        pointZFloat = null;
 
+        buttonCount = COUNT - 2;
+
+        //Makes it so that if you press the load node buttons,
+        //it overrides the previous createIndividualRenederable
+        //in the OnCreate
+        createIndividualRenderable();
+
+    }
+
+    public void restartActivity(View view) {
+
+        recreate();
 
     }
 

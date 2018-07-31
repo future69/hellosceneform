@@ -24,6 +24,7 @@
 
     <string name="clearDatabase">Clear Database</string>
     <string name="databaseActivity">Database</string>
+    <string name="restartActivity">Restart</string>
     <string name="returnToMain">Return</string>
     <string name="title_activity_db_info_viewer">dbInfoViewer</string>
 
