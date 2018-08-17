@@ -39,6 +39,7 @@
         android:id="@+id/spinner1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         >
 
     </Spinner>
@@ -49,6 +50,8 @@
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:hint="@string/ItemNameString"
+        android:backgroundTint="@color/pureWhite"
+
         />
 
     <EditText
@@ -57,6 +60,8 @@
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:hint="@string/ItemLocationString"
+        android:backgroundTint="@color/pureWhite"
+
         />
 
     <EditText
@@ -65,7 +70,20 @@
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:hint="@string/ItemLabelString"
+        android:backgroundTint="@color/pureWhite"
+
         />
+
+      <EditText
+          android:id="@+id/etSearch"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textSize="25sp"
+          android:hint="@string/ItemSearch"
+          android:visibility="gone"
+          android:backgroundTint="@color/pureWhite"
+          android:textColor="@color/babyBlue"
+          />
 
 
   </LinearLayout>
@@ -86,6 +104,8 @@
         android:layout_height="wrap_content"
         android:text="@string/databaseActivity"
         android:onClick="viewDB"
+        android:backgroundTint="@color/pureWhite"
+        android:textColor="@color/babyBlue"
         />
 
     <Button
@@ -94,6 +114,8 @@
         android:layout_height="wrap_content"
         android:text="@string/restartActivity"
         android:onClick="restartActivity"
+        android:backgroundTint="@color/pureWhite"
+        android:textColor="@color/babyBlue"
         />
 
     <Button
@@ -102,22 +124,42 @@
         android:layout_height="59dp"
         android:onClick="loadNode"
         android:text="Load Points"
-
+        android:backgroundTint="@color/pureWhite"
+        android:textColor="@color/babyBlue"
+        android:textColorHint="@color/babyBlue"
         />
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/tryTV"
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/lightBlue"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        />
+        android:gravity="end"
+        >
+
+        <Switch
+            android:id="@+id/idSwitch"
+            android:layout_marginTop="9dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="changeView"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/showWhichPointTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:textSize="30dp"
+                android:text="@string/ItemSearch"
+                />
+        </LinearLayout>
+
 
     </LinearLayout>
 

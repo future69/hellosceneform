@@ -100,8 +100,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         dbString += "Item information : ";
 
-
-
         //Infinite while loop i think
         while(!c.isAfterLast()){
             if(c.getString(c.getColumnIndex("itemName")) != null){
@@ -140,11 +138,11 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     //Print out database as a String
     // Shows data on button press
-    public String databaseToString2(int count){
+    public String databaseToString2(int count, String areaLocation){
 
         String dbString = "";
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_ITEMINFORMATION + " WHERE " + COLUMN_BUTTONCOUNT + " = " + count;
+        String query = "SELECT * FROM " + TABLE_ITEMINFORMATION + " WHERE " + COLUMN_BUTTONCOUNT + " = " + count + " AND " + COLUMN_AREALOCATION + "='" + areaLocation + "'";
 
 
         //Cursor points to a location in your results
@@ -250,6 +248,57 @@ public class MyDBHandler extends SQLiteOpenHelper {
             }
             db.close();
         return dbFloat;
+    }
+
+    //Search name in database
+    public int searchName(String itemName, String areaLocation){
+        int dbFloat = 0;
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_ITEMINFORMATION + " WHERE " + COLUMN_ITEMNAME + " LIKE " + "'" + itemName + "'" + " AND " + COLUMN_AREALOCATION + "='" + areaLocation + "'";
+
+        //Cursor points to a location in your results
+        Cursor c = db.rawQuery(query, null);
+        //Move to the first row in your results
+        c.moveToNext();
+        //Infinite while loop i think
+        while (!c.isAfterLast()) {
+            if (c.getString(c.getColumnIndex("itemName")) != null) {
+
+                dbFloat += c.getFloat(c.getColumnIndex("buttonCount")) - 2;
+
+
+            }
+            //Dont change
+            c.moveToNext();
+        }
+        db.close();
+        return dbFloat;
+    }
+
+
+    //Check for highest button count
+    public int checkButtonCount(String areaLocation){
+
+        int dbInt = 0;
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_ITEMINFORMATION + " WHERE " + COLUMN_AREALOCATION + "='" + areaLocation + "'";
+
+        //Cursor points to a location in your results
+        Cursor c = db.rawQuery(query, null);
+        //Move to the nexy row in your results
+        c.moveToLast();
+        //Infinite while loop i think
+        while (!c.isAfterLast() && c.getCount() > 0) {
+            if (c.getString(c.getColumnIndex("buttonCount")) != null) {
+
+                dbInt += c.getInt(c.getColumnIndex("buttonCount"));
+
+            }
+            //Dont change
+            c.moveToNext();
+        }
+        db.close();
+        return dbInt;
     }
 
 

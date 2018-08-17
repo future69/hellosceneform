@@ -19,6 +19,7 @@
     <string name="ItemNameString">Item Name </string>
     <string name="ItemLocationString">Item Location </string>
     <string name="ItemLabelString">Item Label </string>
+    <string name="ItemSearch">Search...</string>
 
     <string name="showDetails">Show item details?</string>
 

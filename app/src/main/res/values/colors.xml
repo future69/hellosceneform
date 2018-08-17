@@ -6,5 +6,9 @@
     <color name="lightBlue">#e5e5ff</color>
     <color name="black">#000000</color>
     <color name="white">#4Dffffff</color>
-
+    <color name="green">#66ff66</color>
+    <color name="babyBlue">#00d2ff</color>
+    <color name="pureWhite">#FFFFFF</color>
+    <color name="maroon">#DB3328</color>
+    #cc0000
 </resources>
